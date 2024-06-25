@@ -1,92 +1,94 @@
 package vazkii.akashictome;
 
-import com.google.common.collect.Lists;
-
-import net.minecraftforge.common.ForgeConfigSpec;
-
-import org.apache.commons.lang3.tuple.Pair;
-
+import java.io.File;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Map;
+
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ConfigHandler {
 
-	public static ForgeConfigSpec.BooleanValue allItems;
-	public static ForgeConfigSpec.ConfigValue<List<? extends String>> whitelistedItems, whitelistedNames, blacklistedMods;
-	public static ForgeConfigSpec.ConfigValue<List<? extends String>> aliasesList;
-	public static ForgeConfigSpec.BooleanValue hideBookRender;
-	
-	static final ConfigHandler CONFIG;
-	static final ForgeConfigSpec CONFIG_SPEC;
+	public static Configuration config;
 
-	static {
-		final Pair<ConfigHandler, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ConfigHandler::new);
-		CONFIG = specPair.getLeft();
-		CONFIG_SPEC = specPair.getRight();
+	public static boolean allItems;
+	public static List<String> whitelistedItems, whitelistedNames, blacklistedMods;
+
+	public static Map<String, String> aliases = new HashMap();
+
+	public static void init(File configFile) {
+		config = new Configuration(configFile);
+
+		config.load();
+		load();
+
+		MinecraftForge.EVENT_BUS.register(new ChangeListener());
 	}
 
-	public ConfigHandler(ForgeConfigSpec.Builder builder) {
-		allItems = builder.define("Allow all items to be added", false);
-
-		Predicate<Object> validator = o -> o instanceof String;
-
-		whitelistedItems = builder.defineList("Whitelisted Items",
-				Lists.newArrayList("roots:runedtablet",
-						"opencomputers:tool:4",
-						"immersiveengineering:tool:3",
-						"integrateddynamics:on_the_dynamics_of_integration",
-						"theoneprobe:probenote",
-						"evilcraft:origins_of_darkness",
-						"draconicevolution:info_tablet",
-						"charset:tablet",
-						"antiqueatlas:antique_atlas",
-						"theurgy:grimiore",
-						"tconstruct:materials_and_you",
-						"tconstruct:puny_smelting",
-						"tconstruct:mighty_smelting",
-						"tconstruct:tinkers_gadgetry",
-						"tconstruct:fantastic_foundry",
-						"tetra:holo",
-            "occultism:dictionary_of_spirits"), validator);
-
-		whitelistedNames = builder.defineList("Whitelisted Names",
-				Lists.newArrayList("book",
-						"tome",
-						"lexicon",
-						"nomicon",
-						"manual",
-						"knowledge",
-						"pedia",
-						"compendium",
-						"guide",
-						"codex",
-						"dictionary",
-						"journal"),
-				validator);
-
-		blacklistedMods = builder.defineList("Blacklisted Mods", Lists.newArrayList(), validator);
-
-		aliasesList = builder.defineList("Mod Aliases",
-				Lists.newArrayList("nautralpledge=botania",
-						"thermalexpansion=thermalfoundation",
-						"thermaldynamics=thermalfoundation",
-						"thermalcultivation=thermalfoundation",
-						"redstonearsenal=thermalfoundation",
-						"rftoolsdim=rftools",
-						"rftoolspower=rftools",
-						"rftoolscontrol=rftools",
-						"ae2stuff=appliedenergistics2",
-						"animus=bloodmagic",
-						"integrateddynamics=integratedtunnels",
-						"mekanismgenerators=mekanism",
-						"mekanismtools=mekanism",
-						"deepresonance=rftools",
-						"xnet=rftools",
-						"buildcrafttransport=buildcraft",
-						"buildcraftfactory=buildcraft",
-						"buildcraftsilicon=buildcraft"),
-				validator);
+	public static void load() {
+		allItems = loadPropBool("Allow all items to be added", false);
 		
-		hideBookRender = builder.define("Hide Book Render", false);
+		whitelistedItems = loadPropStringList("Whitelisted Items", 
+									"roots:runedtablet", 
+									"opencomputers:tool:4", 
+									"immersiveengineering:tool:3", 
+									"integrateddynamics:on_the_dynamics_of_integration", 
+									"theoneprobe:probenote",
+									"evilcraft:origins_of_darkness",
+									"draconicevolution:info_tablet",
+									"charset:tablet");
+		
+		whitelistedNames = loadPropStringList("Whitelisted Names", "book", "tome", "lexicon", "nomicon", "manual", "knowledge", "pedia", "compendium", "guide", "codex", "journal");
+		
+		blacklistedMods = loadPropStringList("Blacklisted Mods");
+
+		aliases.clear();
+		List<String> aliasesList = loadPropStringList("Mod Aliases", 
+				"nautralpledge=botania", 
+				"incorporeal=botania",
+				"thermalexpansion=thermalfoundation",
+				"thermaldynamics=thermalfoundation",
+				"thermalcultivation=thermalfoundation", 
+				"redstonearsenal=thermalfoundation",
+				"rftoolsdim=rftools",
+				"ae2stuff=appliedenergistics2",
+				"animus=bloodmagic",
+				"integrateddynamics=integratedtunnels",
+				"mekanismgenerators=mekanism",
+				"mekanismtools=mekanism");		
+		
+		for(String s : aliasesList)
+			if(s.matches(".+?=.+")) {
+				String[] tokens = s.toLowerCase().split("=");
+				aliases.put(tokens[0], tokens[1]);
+			}
+
+		if(config.hasChanged())
+			config.save();
+	}
+
+	public static List<String> loadPropStringList(String propName, String... default_) {
+		Property prop = config.get(Configuration.CATEGORY_GENERAL, propName, default_);
+		return Arrays.asList(prop.getStringList());
+	}
+
+	public static boolean loadPropBool(String propName, boolean default_) {
+		Property prop = config.get(Configuration.CATEGORY_GENERAL, propName, default_);
+		return prop.getBoolean(default_);
+	}
+
+	public static class ChangeListener {
+
+		@SubscribeEvent
+		public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
+			if(eventArgs.getModID().equals(AkashicTome.MOD_ID))
+				load();
+		}
+
 	}
 }
