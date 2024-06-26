@@ -20,7 +20,7 @@ public class AttachementRecipe implements IRecipe {
             ItemStack stack = var1.getStackInSlot(i);
             if (stack != null && MorphingHandler.isAkashicTome(stack)) {
                 tome = stack;
-            }else {
+            } else {
                 tool = stack;
             }
 
@@ -35,7 +35,7 @@ public class AttachementRecipe implements IRecipe {
             }
         }
         if (tome != null && tool != null) {
-            if (MorphingHandler.containsItem(tome,tool)){
+            if (MorphingHandler.containsItem(tome, tool)) {
                 foundTarget = false;
             }
         }

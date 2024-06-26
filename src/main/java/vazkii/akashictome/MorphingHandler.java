@@ -1,6 +1,11 @@
 package vazkii.akashictome;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
@@ -131,7 +136,6 @@ public final class MorphingHandler {
 
         System.out.println(stacks);
         return stacks.stream().anyMatch(itemStack -> itemStack.isItemEqual(stack));
-
 
     }
 
