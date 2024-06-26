@@ -6,10 +6,9 @@ import vazkii.akashictome.network.message.MessageUnmorphTome;
 
 public class MessageRegister {
 
-	public static void init() {
-		NetworkHandler.register(MessageMorphTome.class, Side.SERVER);
-		NetworkHandler.register(MessageUnmorphTome.class, Side.SERVER);
-	}
+    public static void init() {
+        NetworkHandler.register(MessageMorphTome.class, Side.SERVER);
+        NetworkHandler.register(MessageUnmorphTome.class, Side.SERVER);
+    }
 
-	
 }

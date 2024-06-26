@@ -1,15 +1,17 @@
 package vazkii.akashictome.utils;
 
-import codechicken.nei.PositionedStack;
+import java.util.Collection;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Set;
+import codechicken.nei.PositionedStack;
 
 public final class ItemNBTHelper {
 
@@ -18,22 +20,24 @@ public final class ItemNBTHelper {
         return stack.hasTagCompound();
     }
 
-    /** Tries to initialize an NBT Tag Compound in an ItemStack,
-     * this will not do anything if the stack already has a tag
-     * compound **/
+    /**
+     * Tries to initialize an NBT Tag Compound in an ItemStack, this will not do anything if the stack already has a tag
+     * compound
+     **/
     public static void initNBT(ItemStack stack) {
-        if(!detectNBT(stack))
-            injectNBT(stack, new NBTTagCompound());
+        if (!detectNBT(stack)) injectNBT(stack, new NBTTagCompound());
     }
 
-    /** Injects an NBT Tag Compound to an ItemStack, no checks
-     * are made previously **/
+    /**
+     * Injects an NBT Tag Compound to an ItemStack, no checks are made previously
+     **/
     public static void injectNBT(ItemStack stack, NBTTagCompound nbt) {
         stack.setTagCompound(nbt);
     }
 
-    /** Gets the NBTTagCompound in an ItemStack. Tries to init it
-     * previously in case there isn't one present **/
+    /**
+     * Gets the NBTTagCompound in an ItemStack. Tries to init it previously in case there isn't one present
+     **/
     public static NBTTagCompound getNBT(ItemStack stack) {
         initNBT(stack);
         return stack.getTagCompound();
@@ -70,7 +74,7 @@ public final class ItemNBTHelper {
     }
 
     public static void setCompound(ItemStack stack, String tag, NBTTagCompound cmp) {
-        if(!tag.equalsIgnoreCase("ench")) // not override the enchantments
+        if (!tag.equalsIgnoreCase("ench")) // not override the enchantments
             getNBT(stack).setTag(tag, cmp);
     }
 
@@ -116,10 +120,12 @@ public final class ItemNBTHelper {
         return verifyExistance(stack, tag) ? getNBT(stack).getDouble(tag) : defaultExpected;
     }
 
-    /** If nullifyOnFail is true it'll return null if it doesn't find any
-     * compounds, otherwise it'll return a new one. **/
+    /**
+     * If nullifyOnFail is true it'll return null if it doesn't find any compounds, otherwise it'll return a new one.
+     **/
     public static NBTTagCompound getCompound(ItemStack stack, String tag, boolean nullifyOnFail) {
-        return verifyExistance(stack, tag) ? getNBT(stack).getCompoundTag(tag) : nullifyOnFail ? null : new NBTTagCompound();
+        return verifyExistance(stack, tag) ? getNBT(stack).getCompoundTag(tag)
+                : nullifyOnFail ? null : new NBTTagCompound();
     }
 
     public static String getString(ItemStack stack, String tag, String defaultExpected) {
@@ -127,40 +133,41 @@ public final class ItemNBTHelper {
     }
 
     public static NBTTagList getList(ItemStack stack, String tag, int objtype, boolean nullifyOnFail) {
-        return verifyExistance(stack, tag) ? getNBT(stack).getTagList(tag, objtype) : nullifyOnFail ? null : new NBTTagList();
+        return verifyExistance(stack, tag) ? getNBT(stack).getTagList(tag, objtype)
+                : nullifyOnFail ? null : new NBTTagList();
     }
 
     // Utils ///////////////////////////////////////////////////////////////////
 
     /**
      * NBT-friendly version of {@link codechicken.nei.NEIServerUtils#areStacksSameType(ItemStack, ItemStack)}
+     * 
      * @param stack1 The {@link ItemStack} being compared.
      * @param stack2 The {@link ItemStack} to compare to.
      * @return whether the two items are the same in terms of itemID, damage and NBT.
      */
     public static boolean areStacksSameTypeWithNBT(ItemStack stack1, ItemStack stack2) {
-        return stack1 != null && stack2 != null &&
-                stack1.getItem() == stack2.getItem() &&
-                (!stack2.getHasSubtypes() || stack2.getItemDamage() == stack1.getItemDamage()) &&
-                matchTag(stack1.getTagCompound(), stack2.getTagCompound());
+        return stack1 != null && stack2 != null
+                && stack1.getItem() == stack2.getItem()
+                && (!stack2.getHasSubtypes() || stack2.getItemDamage() == stack1.getItemDamage())
+                && matchTag(stack1.getTagCompound(), stack2.getTagCompound());
     }
 
     /**
      * NBT-friendly version of {@link codechicken.nei.NEIServerUtils#areStacksSameTypeCrafting(ItemStack, ItemStack)}
+     * 
      * @param stack1 The {@link ItemStack} being compared.
      * @param stack2 The {@link ItemStack} to compare to.
      * @return whether the two items are the same from the perspective of a crafting inventory.
      */
     public static boolean areStacksSameTypeCraftingWithNBT(ItemStack stack1, ItemStack stack2) {
-        return stack1 != null && stack2 != null &&
-                stack1.getItem() == stack2.getItem() &&
-                (
-                        stack1.getItemDamage() == stack2.getItemDamage() ||
-                                stack1.getItemDamage() == OreDictionary.WILDCARD_VALUE ||
-                                stack2.getItemDamage() == OreDictionary.WILDCARD_VALUE ||
-                                stack1.getItem().isDamageable()
-                ) &&
-                matchTag(stack1.getTagCompound(), stack2.getTagCompound());
+        return stack1 != null && stack2 != null
+                && stack1.getItem() == stack2.getItem()
+                && (stack1.getItemDamage() == stack2.getItemDamage()
+                        || stack1.getItemDamage() == OreDictionary.WILDCARD_VALUE
+                        || stack2.getItemDamage() == OreDictionary.WILDCARD_VALUE
+                        || stack1.getItem().isDamageable())
+                && matchTag(stack1.getTagCompound(), stack2.getTagCompound());
     }
 
     /**
@@ -182,7 +189,7 @@ public final class ItemNBTHelper {
     private static boolean matchTagCompound(NBTTagCompound template, NBTTagCompound target) {
         if (template.tagMap.size() > target.tagMap.size()) return false;
 
-        //noinspection unchecked
+        // noinspection unchecked
         for (String key : (Set<String>) template.func_150296_c()) {
             if (!matchTag(template.getTag(key), target.getTag(key))) return false;
         }
@@ -200,18 +207,16 @@ public final class ItemNBTHelper {
         return true;
     }
 
-    private static NBTBase get(NBTTagList tag, int idx)
-    {
-        return idx >= 0 && idx < tag.tagList.size() ? (NBTBase)tag.tagList.get(idx) : null;
+    private static NBTBase get(NBTTagList tag, int idx) {
+        return idx >= 0 && idx < tag.tagList.size() ? (NBTBase) tag.tagList.get(idx) : null;
     }
 
     /**
-     * NBT-friendly version of {@link codechicken.nei.recipe.TemplateRecipeHandler.CachedRecipe#contains(Collection, ItemStack)}
+     * NBT-friendly version of
+     * {@link codechicken.nei.recipe.TemplateRecipeHandler.CachedRecipe#contains(Collection, ItemStack)}
      */
     public static boolean cachedRecipeContainsWithNBT(Collection<PositionedStack> ingredients, ItemStack ingredient) {
-        for (PositionedStack stack : ingredients)
-            if (positionedStackContainsWithNBT(stack, ingredient))
-                return true;
+        for (PositionedStack stack : ingredients) if (positionedStackContainsWithNBT(stack, ingredient)) return true;
 
         return false;
     }
@@ -220,9 +225,7 @@ public final class ItemNBTHelper {
      * NBT-friendly version of {@link codechicken.nei.PositionedStack#contains(ItemStack)}
      */
     public static boolean positionedStackContainsWithNBT(PositionedStack stack, ItemStack ingredient) {
-        for(ItemStack item : stack.items)
-            if(areStacksSameTypeCraftingWithNBT(item, ingredient))
-                return true;
+        for (ItemStack item : stack.items) if (areStacksSameTypeCraftingWithNBT(item, ingredient)) return true;
 
         return false;
     }

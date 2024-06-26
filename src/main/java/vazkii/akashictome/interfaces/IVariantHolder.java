@@ -1,6 +1,7 @@
 package vazkii.akashictome.interfaces;
 
 import net.minecraft.client.renderer.ItemRenderer;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

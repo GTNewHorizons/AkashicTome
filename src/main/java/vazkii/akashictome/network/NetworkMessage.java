@@ -6,18 +6,19 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import org.apache.commons.lang3.tuple.Pair;
-
-import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import io.netty.buffer.ByteBuf;
 
-public abstract class NetworkMessage<REQ extends NetworkMessage> implements Serializable, IMessage, IMessageHandler<REQ, IMessage> {
+public abstract class NetworkMessage<REQ extends NetworkMessage>
+        implements Serializable, IMessage, IMessageHandler<REQ, IMessage> {
 
     private static final HashMap<Class, Pair<Reader, Writer>> handlers = new HashMap();
     private static final HashMap<Class, Field[]> fieldCache = new HashMap();
@@ -34,7 +35,7 @@ public abstract class NetworkMessage<REQ extends NetworkMessage> implements Seri
         mapHandler(String.class, NetworkMessage::readString, NetworkMessage::writeString);
         mapHandler(NBTTagCompound.class, NetworkMessage::readNBT, NetworkMessage::writeNBT);
         mapHandler(ItemStack.class, NetworkMessage::readItemStack, NetworkMessage::writeItemStack);
-        mapHandler(BlockPos.class, NetworkMessage::readBlockPos, NetworkMessage::writeBlockPos);
+        // mapHandler(BlockPos.class, NetworkMessage::readBlockPos, NetworkMessage::writeBlockPos);
     }
 
     // The thing you override!
@@ -52,12 +53,11 @@ public abstract class NetworkMessage<REQ extends NetworkMessage> implements Seri
         try {
             Class<?> clazz = getClass();
             Field[] clFields = getClassFields(clazz);
-            for(Field f : clFields) {
+            for (Field f : clFields) {
                 Class<?> type = f.getType();
-                if(acceptField(f, type))
-                    readField(f, type, buf);
+                if (acceptField(f, type)) readField(f, type, buf);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException("Error at reading packet " + this, e);
         }
     }
@@ -67,55 +67,51 @@ public abstract class NetworkMessage<REQ extends NetworkMessage> implements Seri
         try {
             Class<?> clazz = getClass();
             Field[] clFields = getClassFields(clazz);
-            for(Field f : clFields) {
+            for (Field f : clFields) {
                 Class<?> type = f.getType();
-                if(acceptField(f, type))
-                    writeField(f, type, buf);
+                if (acceptField(f, type)) writeField(f, type, buf);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException("Error at writing packet " + this, e);
         }
     }
 
     private static Field[] getClassFields(Class<?> clazz) {
-        if(fieldCache.containsValue(clazz))
-            return fieldCache.get(clazz);
+        if (fieldCache.containsValue(clazz)) return fieldCache.get(clazz);
         else {
             Field[] fields = clazz.getFields();
-            Arrays.sort(fields, (Field f1, Field f2) -> {
-                return f1.getName().compareTo(f2.getName());
-            });
+            Arrays.sort(fields, (Field f1, Field f2) -> { return f1.getName().compareTo(f2.getName()); });
             fieldCache.put(clazz, fields);
             return fields;
         }
     }
 
-    private final void writeField(Field f, Class clazz, ByteBuf buf) throws IllegalArgumentException, IllegalAccessException {
+    private final void writeField(Field f, Class clazz, ByteBuf buf)
+            throws IllegalArgumentException, IllegalAccessException {
         Pair<Reader, Writer> handler = getHandler(clazz);
         handler.getRight().write(f.get(this), buf);
     }
 
-    private final void readField(Field f, Class clazz, ByteBuf buf) throws IllegalArgumentException, IllegalAccessException {
+    private final void readField(Field f, Class clazz, ByteBuf buf)
+            throws IllegalArgumentException, IllegalAccessException {
         Pair<Reader, Writer> handler = getHandler(clazz);
         f.set(this, handler.getLeft().read(buf));
     }
 
     private static Pair<Reader, Writer> getHandler(Class<?> clazz) {
         Pair<Reader, Writer> pair = handlers.get(clazz);
-        if(pair == null)
-            throw new RuntimeException("No R/W handler for  " + clazz);
+        if (pair == null) throw new RuntimeException("No R/W handler for  " + clazz);
         return pair;
     }
 
     private static boolean acceptField(Field f, Class<?> type) {
         int mods = f.getModifiers();
-        if(Modifier.isFinal(mods) || Modifier.isStatic(mods) || Modifier.isTransient(mods))
-            return false;
+        if (Modifier.isFinal(mods) || Modifier.isStatic(mods) || Modifier.isTransient(mods)) return false;
 
-        return  handlers.containsKey(type);
+        return handlers.containsKey(type);
     }
 
-    public static <T extends Object>void mapHandler(Class<T> type, Reader<T> reader, Writer<T> writer) {
+    public static <T extends Object> void mapHandler(Class<T> type, Reader<T> reader, Writer<T> writer) {
         handlers.put(type, Pair.of(reader, writer));
     }
 
@@ -207,20 +203,18 @@ public abstract class NetworkMessage<REQ extends NetworkMessage> implements Seri
         ByteBufUtils.writeItemStack(buf, stack);
     }
 
-    private static BlockPos readBlockPos(ByteBuf buf) {
-        return BlockPos.fromLong(buf.readLong());
-    }
+    // private static BlockPos readBlockPos(ByteBuf buf) {return BlockPos.fromLong(buf.readLong());}
 
-    private static void writeBlockPos(BlockPos pos, ByteBuf buf) {
-        buf.writeLong(pos.toLong());
-    }
+    // private static void writeBlockPos(BlockPos pos, ByteBuf buf) {buf.writeLong(pos.toLong());}
 
     // Functional interfaces
     public static interface Writer<T extends Object> {
+
         public void write(T t, ByteBuf buf);
     }
 
     public static interface Reader<T extends Object> {
+
         public T read(ByteBuf buf);
     }
 
