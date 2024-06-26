@@ -4,7 +4,6 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import vazkii.akashictome.utils.ItemNBTHelper;
@@ -84,8 +83,8 @@ public class AttachementRecipe implements IRecipe {
 
         String[] registryNameRL = stack.getItem().delegate.name().split(":");
         String registryName = registryNameRL[0];
-        if (ConfigHandler.whitelistedItems.contains(registryName)
-                || ConfigHandler.whitelistedItems.contains(registryName + ":" + stack.getUnlocalizedName() + ":" + stack.getItemDamage()))
+        if (ConfigHandler.whitelistedItems.contains(registryName) || ConfigHandler.whitelistedItems
+                .contains(registryName + ":" + stack.getUnlocalizedName() + ":" + stack.getItemDamage()))
             return true;
 
         String itemName = (registryName.toLowerCase() + ":" + stack.getUnlocalizedName() + ":" + stack.getItemDamage());
