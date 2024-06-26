@@ -9,7 +9,6 @@ import vazkii.akashictome.ModItems;
 import vazkii.akashictome.MorphingHandler;
 import vazkii.akashictome.network.NetworkMessage;
 
-
 public class MessageUnmorphTome extends NetworkMessage {
 
 	public MessageUnmorphTome() { }

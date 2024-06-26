@@ -10,16 +10,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.RecipeSorter;
 import vazkii.akashictome.item.ItemMod;
 
-
 public class ItemTome extends ItemMod {
 
 	public ItemTome() {
-		super();
+		super("tome");
 		setMaxStackSize(1);
 		setCreativeTab(CreativeTabs.tabTools);
 
@@ -28,41 +28,43 @@ public class ItemTome extends ItemMod {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(ItemStack needed, EntityPlayer playerIn, World worldIn, int aX, int aY, int aZ, int facing, float hitX, float hitY, float hitZ) {
 		ItemStack stack = playerIn.getHeldItem();
 		if(playerIn.isSneaking()) {
-			String mod = MorphingHandler.getModFromState(worldIn.getBlockState(pos)); 
+			String mod = MorphingHandler.getModFromBlock(worldIn.getBlock(aX, aY, aZ));
 			ItemStack newStack = MorphingHandler.getShiftStackForMod(stack, mod);
 			if(!ItemStack.areItemStacksEqual(newStack, stack)) {
-				playerIn.setHeldItem(hand, newStack);
-				return EnumActionResult.SUCCESS;
+				playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, newStack);
+				return true;
 			}
 
 			if(worldIn.isRemote) {
-				RayTraceResult result = new RayTraceResult(new Vec3d(hitX, hitY, hitZ), facing, pos);
-				return AkashicTome.proxy.openWikiPage(worldIn, worldIn.getBlockState(pos).getBlock(), result) ? EnumActionResult.SUCCESS : EnumActionResult.FAIL;
+				MovingObjectPosition result = new MovingObjectPosition(aX, aY, aZ, facing, Vec3.createVectorHelper(hitX, hitY, hitZ));
+				return AkashicTome.proxy.openWikiPage(worldIn, worldIn.getBlock(aX, aY, aZ), result);
 			}
 		}
 
-		return EnumActionResult.PASS;
+		return false;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn) {
+	public ItemStack onItemRightClick(ItemStack itemIn, World worldIn, EntityPlayer playerIn) {
 		ItemStack stack = playerIn.getHeldItem();
-		AkashicTome.proxy.openTomeGUI(playerIn, stack);
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+		if (itemIn == stack) {
+			AkashicTome.proxy.openTomeGUI(playerIn, stack);
+			return stack;
+		}
+		return itemIn;
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, World playerIn, List<String> tooltip, ITooltipFlag advanced) {
+	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 		if(!stack.hasTagCompound() || !stack.getTagCompound().hasKey(MorphingHandler.TAG_TOME_DATA))
 			return;
 
 		NBTTagCompound data = stack.getTagCompound().getCompoundTag(MorphingHandler.TAG_TOME_DATA);
-		if(data.getKeySet().size() == 0)
+		if(data.func_150296_c().isEmpty())
 			return;
-
 		tooltipIfShift(tooltip, () -> {
 			List<String> keys = new ArrayList(data.func_150296_c());
 			Collections.sort(keys);
@@ -87,12 +89,12 @@ public class ItemTome extends ItemMod {
 				}
 			}
 		}
-				);
+		);
 	}
 
 	@Override
 	public String getModNamespace() {
-		return "akashictome";
+		return AkashicTome.MOD_ID;
 	}
 
 }

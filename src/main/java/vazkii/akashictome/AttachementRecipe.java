@@ -5,11 +5,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import vazkii.akashictome.utils.ItemNBTHelper;
 
 
-public class AttachementRecipe extends IRecipe {
+public class AttachementRecipe implements IRecipe {
 
 	@Override
 	public boolean matches(InventoryCrafting var1, World var2) {
@@ -90,12 +90,11 @@ public class AttachementRecipe extends IRecipe {
 		if(ConfigHandler.blacklistedMods.contains(mod))
 			return false;
 
-		ResourceLocation registryNameRL = stack.getItem().getRegistryName();
-		String registryName = registryNameRL.toString();
+		String registryName = stack.getItem().getUnlocalizedName();
 		if(ConfigHandler.whitelistedItems.contains(registryName) || ConfigHandler.whitelistedItems.contains(registryName + ":" + stack.getItemDamage()))
 			return true;
 
-		String itemName = registryNameRL.getResourcePath().toLowerCase();
+		String itemName = registryName.toLowerCase();
 		for(String s : ConfigHandler.whitelistedNames)
 			if(itemName.contains(s.toLowerCase()))
 				return true;
@@ -111,11 +110,6 @@ public class AttachementRecipe extends IRecipe {
 	@Override
 	public ItemStack getRecipeOutput() {
 		return null;
-	}
-
-	@Override
-	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-		return new ItemStack[inv.getSizeInventory()];
 	}
 
 }

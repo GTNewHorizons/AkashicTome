@@ -7,8 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import vazkii.akashictome.client.GuiTome;
@@ -20,7 +19,7 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void updateEquippedItem() {
-		Minecraft.getMinecraft().entityRenderer.itemRenderer.resetEquippedProgress(EnumHand.MAIN_HAND); 
+		Minecraft.getMinecraft().entityRenderer.itemRenderer.resetEquippedProgress();
 	}
 	
 	@Override
@@ -31,14 +30,14 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void openTomeGUI(EntityPlayer player, ItemStack stack) {
 		Minecraft mc = Minecraft.getMinecraft();
-		if(mc.player == player)
+		if(mc.thePlayer == player)
 			mc.displayGuiScreen(new GuiTome(stack));
 	}
 	
 	@Override
-	public boolean openWikiPage(World world, Block block, RayTraceResult pos) {
+	public boolean openWikiPage(World world, Block block, MovingObjectPosition pos) {
 		IWikiProvider wiki = WikiHooks.getWikiFor(block);
-		String url = wiki.getWikiURL(world, pos, Minecraft.getMinecraft().player);
+		String url = wiki.getWikiURL(world, pos);
 		if(url != null && !url.isEmpty()) {
 			try {
 				Desktop.getDesktop().browse(new URI(url));

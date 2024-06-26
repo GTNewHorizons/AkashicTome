@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -31,8 +32,8 @@ public final class MorphingHandler {
 	public static final String TAG_ITEM_DEFINED_MOD = "akashictome:definedMod";
 
 	@SubscribeEvent
-	public void onPlayerLeftClick(PlayerInteractEvent.LeftClickEmpty event) {
-		ItemStack stack = event.getItemStack();
+	public void onPlayerLeftClick(PlayerInteractEvent event) {
+		ItemStack stack = event.entityPlayer.getItemInUse();
 		if(stack != null && isAkashicTome(stack) && stack.getItem() != ModItems.tome) {
 			NetworkHandler.INSTANCE.sendToServer(new MessageUnmorphTome());
 		}
@@ -78,12 +79,12 @@ public final class MorphingHandler {
 		}
 	}
 
-	public static String getModFromState(IBlockState state) {
-		return getModOrAlias(state.getBlock().getRegistryName().getResourceDomain());
+	public static String getModFromBlock(Block state) {
+		return getModOrAlias(state.getUnlocalizedName());
 	}
 
 	public static String getModFromStack(ItemStack stack) {
-		return getModOrAlias(stack == null ? MINECRAFT : stack.getItem().getCreatorModId(stack));
+		return getModOrAlias(stack == null ? MINECRAFT : stack.getItem().getUnlocalizedName(stack));
 	}
 
 	public static String getModOrAlias(String mod) {

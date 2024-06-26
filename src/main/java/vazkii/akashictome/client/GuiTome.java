@@ -23,7 +23,6 @@ import vazkii.akashictome.network.NetworkHandler;
 import vazkii.akashictome.network.message.MessageMorphTome;
 import vazkii.akashictome.utils.ItemNBTHelper;
 
-
 public class GuiTome extends GuiScreen {
 
 	ResourceLocation texture = new ResourceLocation("akashictome:textures/models/book.png");

@@ -49,7 +49,7 @@ public class HUDHandler {
 				String line1 = "";
 				String line2 = "";
 
-				String mod = MorphingHandler.getModFromState(state);
+				String mod = MorphingHandler.getModFromBlock(block);
 				ItemStack morphStack = MorphingHandler.getShiftStackForMod(tomeStack, mod);
 				if(morphStack != null && !ItemStack.areItemStacksEqual(morphStack, tomeStack)) {
 					drawStack = morphStack;
