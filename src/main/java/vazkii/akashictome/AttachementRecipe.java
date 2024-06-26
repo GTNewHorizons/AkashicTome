@@ -79,7 +79,7 @@ public class AttachementRecipe implements IRecipe {
 
         if (ConfigHandler.allItems) return true;
 
-        if (ConfigHandler.blacklistedMods.contains(mod)) return false;
+        if (ConfigHandler.blacklistedMods.contains(mod) || mod.equals(AkashicTome.MOD_ID)) return false;
 
         String registryName = stack.getItem().getUnlocalizedName();
         if (ConfigHandler.whitelistedItems.contains(registryName)

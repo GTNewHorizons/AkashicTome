@@ -60,32 +60,34 @@ public final class MorphingHandler {
                 e.worldObj.spawnEntityInWorld(newItem);
             }
 
-            ItemStack copy = stack.copy();
-            NBTTagCompound copyCmp = copy.getTagCompound();
-            if (copyCmp == null) {
-                copyCmp = new NBTTagCompound();
-                copy.setTagCompound(copyCmp);
+            ItemStack original = stack.copy();
+            NBTTagCompound tome = original.getTagCompound();
+            if (tome == null) {
+                tome = new NBTTagCompound();
+                original.setTagCompound(tome);
             }
 
-            copyCmp.removeTag("display");
-            String displayName = copyCmp.getString(TAG_TOME_DISPLAY_NAME);
-            if (!displayName.isEmpty() && !displayName.equals(copy.getDisplayName()))
-                copy.setStackDisplayName(displayName);
+            tome.removeTag("display");
+            String displayName = tome.getString(TAG_TOME_DISPLAY_NAME);
+            if (!displayName.isEmpty() && !displayName.equals(original.getDisplayName()))
+                original.setStackDisplayName(displayName);
 
-            copyCmp.removeTag(TAG_MORPHING);
-            copyCmp.removeTag(TAG_TOME_DISPLAY_NAME);
-            copyCmp.removeTag(TAG_TOME_DATA);
+            tome.removeTag(TAG_MORPHING);
+            tome.removeTag(TAG_TOME_DISPLAY_NAME);
+            tome.removeTag(TAG_TOME_DATA);
 
-            e.setEntityItemStack(copy);
+            e.setEntityItemStack(original);
         }
     }
 
     public static String getModFromBlock(Block state) {
-        return getModOrAlias(state.getUnlocalizedName());
+        String[] mod = state.delegate.name().split(":");
+        return getModOrAlias(mod[0]);
     }
 
     public static String getModFromStack(ItemStack stack) {
-        return getModOrAlias(stack == null ? MINECRAFT : stack.getItem().getUnlocalizedName(stack));
+        String[] mod = stack.getItem().delegate.name().split(":");
+        return getModOrAlias(stack == null ? MINECRAFT : mod[0]);
     }
 
     public static String getModOrAlias(String mod) {
