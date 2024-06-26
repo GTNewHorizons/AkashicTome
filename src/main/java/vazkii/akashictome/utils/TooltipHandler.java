@@ -13,7 +13,7 @@ public final class TooltipHandler {
     @SideOnly(Side.CLIENT)
     public static void tooltipIfShift(List<String> tooltip, Runnable r) {
         if (GuiScreen.isShiftKeyDown()) r.run();
-        else addToTooltip(tooltip, "arl.misc.shiftForInfo");
+        else addToTooltip(tooltip, "akashictome.misc.shiftForInfo");
     }
 
     @SideOnly(Side.CLIENT)

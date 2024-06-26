@@ -33,9 +33,11 @@ public final class MorphingHandler {
 
     @SubscribeEvent
     public void onPlayerLeftClick(PlayerInteractEvent event) {
-        ItemStack stack = event.entityPlayer.getItemInUse();
-        if (stack != null && isAkashicTome(stack) && stack.getItem() != ModItems.tome) {
-            NetworkHandler.INSTANCE.sendToServer(new MessageUnmorphTome());
+        if (event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK && event.entityPlayer.isSneaking()) {
+            ItemStack stack = event.entityPlayer.getHeldItem();
+            if (stack != null && isAkashicTome(stack) && stack.getItem() != ModItems.tome) {
+                NetworkHandler.INSTANCE.sendToServer(new MessageUnmorphTome());
+            }
         }
     }
 
