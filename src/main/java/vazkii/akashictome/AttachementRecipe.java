@@ -2,6 +2,7 @@ package vazkii.akashictome;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -20,7 +21,7 @@ public class AttachementRecipe implements IRecipe {
             ItemStack stack = var1.getStackInSlot(i);
             if (stack != null && MorphingHandler.isAkashicTome(stack)) {
                 tome = stack;
-            } else {
+            } else if (stack != null) {
                 tool = stack;
             }
 
