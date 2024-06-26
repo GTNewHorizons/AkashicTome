@@ -94,10 +94,7 @@ public class AttachementRecipe implements IRecipe {
 
         if (ConfigHandler.blacklistedMods.contains(mod) || mod.equals(AkashicTome.MOD_ID)) return false;
 
-        String[] registryNameRL = stack.getItem().delegate.name().split(":");
-        String registryName = registryNameRL[0] + ":" + registryNameRL[1];
-
-        System.out.println(registryName + ":" + stack.getItemDamage());
+        String registryName = stack.getItem().delegate.name();
 
         if (ConfigHandler.blacklistedItems.contains(registryName) || ConfigHandler.blacklistedItems
                 .contains(registryName + ":" + stack.getItemDamage())) {
@@ -108,7 +105,7 @@ public class AttachementRecipe implements IRecipe {
                 .contains(registryName + ":" + stack.getItemDamage()))
             return true;
 
-        String itemName = (registryName.toLowerCase() + ":" + stack.getItem().getUnlocalizedName() + ":" + stack.getItemDamage());
+        String itemName = (registryName.toLowerCase() + ":" + stack.getItemDamage());
         for (String s : ConfigHandler.whitelistedNames) if (itemName.contains(s.toLowerCase())) return true;
 
         return false;

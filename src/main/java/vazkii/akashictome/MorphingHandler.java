@@ -115,10 +115,6 @@ public final class MorphingHandler {
     }
 
     public static boolean containsItem(ItemStack tome, ItemStack stack) {
-        System.out.println(tome);
-        System.out.println(stack);
-
-        var t = tome.getItem();
         ArrayList<ItemStack> stacks = new ArrayList<>();
         if (tome.hasTagCompound()) {
             NBTTagCompound data = tome.getTagCompound().getCompoundTag(MorphingHandler.TAG_TOME_DATA);
@@ -133,10 +129,7 @@ public final class MorphingHandler {
                 }
             }
         }
-
-        System.out.println(stacks);
         return stacks.stream().anyMatch(itemStack -> itemStack.isItemEqual(stack));
-
     }
 
     public static ItemStack makeMorphedStack(ItemStack currentStack, String targetMod, NBTTagCompound morphData) {
