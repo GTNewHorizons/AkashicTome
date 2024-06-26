@@ -52,12 +52,10 @@ public class ConfigHandler {
                 "witchery:ingredient:106",
                 "witchery:ingredient:107",
                 "witchery:ingredient:127",
-                "witchery:vampirebook");
+                "witchery:vampirebook",
+                "Thaumcraft:ItemEldritchObject:1");
 
-        blacklistedItems = loadPropStringList(
-                "Blacklisted Items",
-                "witchery:bookbiomes2"
-        );
+        blacklistedItems = loadPropStringList("Blacklisted Items", "witchery:bookbiomes2");
 
         whitelistedNames = loadPropStringList(
                 "Whitelisted Names",

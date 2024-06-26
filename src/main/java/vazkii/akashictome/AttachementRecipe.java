@@ -2,7 +2,6 @@ package vazkii.akashictome;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -96,13 +95,13 @@ public class AttachementRecipe implements IRecipe {
 
         String registryName = stack.getItem().delegate.name();
 
-        if (ConfigHandler.blacklistedItems.contains(registryName) || ConfigHandler.blacklistedItems
-                .contains(registryName + ":" + stack.getItemDamage())) {
+        if (ConfigHandler.blacklistedItems.contains(registryName)
+                || ConfigHandler.blacklistedItems.contains(registryName + ":" + stack.getItemDamage())) {
             return false;
         }
 
-        if (ConfigHandler.whitelistedItems.contains(registryName) || ConfigHandler.whitelistedItems
-                .contains(registryName + ":" + stack.getItemDamage()))
+        if (ConfigHandler.whitelistedItems.contains(registryName)
+                || ConfigHandler.whitelistedItems.contains(registryName + ":" + stack.getItemDamage()))
             return true;
 
         String itemName = (registryName.toLowerCase() + ":" + stack.getItemDamage());
