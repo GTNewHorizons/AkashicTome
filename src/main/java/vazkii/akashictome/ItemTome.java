@@ -4,39 +4,36 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.client.util.ITooltipFlag;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import vazkii.arl.item.ItemMod;
+import net.minecraftforge.oredict.RecipeSorter;
+import vazkii.akashictome.item.ItemMod;
+
 
 public class ItemTome extends ItemMod {
 
 	public ItemTome() {
-		super("tome");
+		super();
 		setMaxStackSize(1);
-		setCreativeTab(CreativeTabs.TOOLS);
+		setCreativeTab(CreativeTabs.tabTools);
 
-		new AttachementRecipe();
+		GameRegistry.addRecipe(new AttachementRecipe());
+		RecipeSorter.register("akashictome:attachment", AttachementRecipe.class, RecipeSorter.Category.SHAPELESS, "");
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		ItemStack stack = playerIn.getHeldItem(hand);
+	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack stack = playerIn.getHeldItem();
 		if(playerIn.isSneaking()) {
 			String mod = MorphingHandler.getModFromState(worldIn.getBlockState(pos)); 
 			ItemStack newStack = MorphingHandler.getShiftStackForMod(stack, mod);
-			if(!ItemStack.areItemsEqual(newStack, stack)) {
+			if(!ItemStack.areItemStacksEqual(newStack, stack)) {
 				playerIn.setHeldItem(hand, newStack);
 				return EnumActionResult.SUCCESS;
 			}
@@ -51,8 +48,8 @@ public class ItemTome extends ItemMod {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
-		ItemStack stack = playerIn.getHeldItem(hand);
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn) {
+		ItemStack stack = playerIn.getHeldItem();
 		AkashicTome.proxy.openTomeGUI(playerIn, stack);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
@@ -67,22 +64,22 @@ public class ItemTome extends ItemMod {
 			return;
 
 		tooltipIfShift(tooltip, () -> {
-			List<String> keys = new ArrayList(data.getKeySet());
+			List<String> keys = new ArrayList(data.func_150296_c());
 			Collections.sort(keys);
 			String currMod = "";
 			
 			for(String s : keys) {
 				NBTTagCompound cmp = data.getCompoundTag(s);
 				if(cmp != null) {
-					ItemStack modStack = new ItemStack(cmp);
-					if(!modStack.isEmpty()) {
+					ItemStack modStack = ItemStack.loadItemStackFromNBT(cmp);
+					if(modStack != null) {
 						String name = modStack.getDisplayName();
 						if(modStack.hasTagCompound() && modStack.getTagCompound().hasKey(MorphingHandler.TAG_TOME_DISPLAY_NAME))
 							name = modStack.getTagCompound().getString(MorphingHandler.TAG_TOME_DISPLAY_NAME);
 						String mod = MorphingHandler.getModFromStack(modStack);
 						
 						if(!currMod.equals(mod)) 
-							tooltip.add(TextFormatting.AQUA + MorphingHandler.getModNameForId(mod));
+							tooltip.add(EnumChatFormatting.AQUA + MorphingHandler.getModNameForId(mod));
 						tooltip.add(" \u2520 " + name);
 						
 						currMod = mod;

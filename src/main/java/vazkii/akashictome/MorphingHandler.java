@@ -4,20 +4,20 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import vazkii.akashictome.network.NetworkHandler;
 import vazkii.akashictome.network.message.MessageUnmorphTome;
-import vazkii.arl.network.NetworkHandler;
-import vazkii.arl.util.ItemNBTHelper;
+import vazkii.akashictome.utils.ItemNBTHelper;
+
 
 public final class MorphingHandler {
 
@@ -40,12 +40,12 @@ public final class MorphingHandler {
 
 	@SubscribeEvent
 	public void onItemDropped(ItemTossEvent event) {
-		if(!event.getPlayer().isSneaking())
+		if(!event.player.isSneaking())
 			return;
 
-		EntityItem e = event.getEntityItem();
-		ItemStack stack = e.getItem();
-		if(!stack.isEmpty() && isAkashicTome(stack) && stack.getItem() != ModItems.tome) {
+		EntityItem e = event.entityItem;
+		ItemStack stack = e.getEntityItem();
+		if(stack != null && isAkashicTome(stack) && stack.getItem() != ModItems.tome) {
 			NBTTagCompound morphData = (NBTTagCompound) stack.getTagCompound().getCompoundTag(TAG_TOME_DATA).copy();
 			String currentMod = ItemNBTHelper.getString(stack, TAG_ITEM_DEFINED_MOD, getModFromStack(stack));
 
@@ -53,9 +53,9 @@ public final class MorphingHandler {
 			NBTTagCompound newMorphData = morph.getTagCompound().getCompoundTag(TAG_TOME_DATA);
 			newMorphData.removeTag(currentMod);
 
-			if(!e.getEntityWorld().isRemote) {
-				EntityItem newItem = new EntityItem(e.getEntityWorld(), e.posX, e.posY, e.posZ, morph);
-				e.getEntityWorld().spawnEntity(newItem);
+			if(!e.worldObj.isRemote) {
+				EntityItem newItem = new EntityItem(e.worldObj, e.posX, e.posY, e.posZ, morph);
+				e.worldObj.spawnEntityInWorld(newItem);
 			}
 
 			ItemStack copy = stack.copy();
@@ -74,7 +74,7 @@ public final class MorphingHandler {
 			copyCmp.removeTag(TAG_TOME_DISPLAY_NAME);
 			copyCmp.removeTag(TAG_TOME_DATA);
 
-			e.setItem(copy);
+			e.setEntityItemStack(copy);
 		}
 	}
 
@@ -83,7 +83,7 @@ public final class MorphingHandler {
 	}
 
 	public static String getModFromStack(ItemStack stack) {
-		return getModOrAlias(stack.isEmpty() ? MINECRAFT : stack.getItem().getCreatorModId(stack));
+		return getModOrAlias(stack == null ? MINECRAFT : stack.getItem().getCreatorModId(stack));
 	}
 
 	public static String getModOrAlias(String mod) {
@@ -129,8 +129,8 @@ public final class MorphingHandler {
 			NBTTagCompound targetCmp = morphData.getCompoundTag(targetMod);
 			morphData.removeTag(targetMod);
 
-			stack = new ItemStack(targetCmp);
-			if(stack.isEmpty())
+			stack = ItemStack.loadItemStackFromNBT(targetCmp);
+			if(stack == null)
 				stack = new ItemStack(ModItems.tome);
 		}
 
@@ -147,10 +147,10 @@ public final class MorphingHandler {
 				displayName = stackCmp.getString(TAG_TOME_DISPLAY_NAME);
 			else stackCmp.setString(TAG_TOME_DISPLAY_NAME, displayName);
 
-			stack.setStackDisplayName(TextFormatting.RESET + I18n.translateToLocalFormatted("akashictome.sudo_name", TextFormatting.GREEN + displayName + TextFormatting.RESET));
+			stack.setStackDisplayName(EnumChatFormatting.RESET + I18n.format("akashictome.sudo_name", EnumChatFormatting.GREEN + displayName + EnumChatFormatting.RESET));
 		}
 
-		stack.setCount(1);
+		stack.stackSize = 1;
 		return stack;
 	}
 
@@ -167,7 +167,7 @@ public final class MorphingHandler {
 	}
 
 	public static boolean isAkashicTome(ItemStack stack) {
-		if(stack.isEmpty())
+		if(stack == null)
 			return false;
 
 		if(stack.getItem() == ModItems.tome)

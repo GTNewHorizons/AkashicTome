@@ -1,19 +1,17 @@
 package vazkii.akashictome;
 
-import akka.io.Tcp.Message;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
+
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraft.creativetab.CreativeTabs;
 import vazkii.akashictome.proxy.CommonProxy;
-import vazkii.arl.network.NetworkHandler;
+import vazkii.botania.client.lib.LibResources;
+import vazkii.botania.common.core.BotaniaCreativeTab;
+import vazkii.botania.common.lib.LibMisc;
+
+import java.util.List;
 
 @Mod(modid = AkashicTome.MOD_ID, name = AkashicTome.MOD_NAME, version = AkashicTome.VERSION, dependencies = AkashicTome.DEPENDENCIES, guiFactory = AkashicTome.GUI_FACTORY)
 public class AkashicTome {

@@ -2,18 +2,14 @@ package vazkii.akashictome;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import vazkii.arl.recipe.ModRecipe;
-import vazkii.arl.util.ItemNBTHelper;
 
-public class AttachementRecipe extends ModRecipe {
 
-	public AttachementRecipe() {
-		super(new ResourceLocation("akashictome", "attachment"));
-	}
+public class AttachementRecipe extends IRecipe {
 
 	@Override
 	public boolean matches(InventoryCrafting var1, World var2) {
@@ -22,7 +18,7 @@ public class AttachementRecipe extends ModRecipe {
 
 		for(int i = 0; i < var1.getSizeInventory(); i++) {
 			ItemStack stack = var1.getStackInSlot(i);
-			if(!stack.isEmpty()) {
+			if(stack != null) {
 				if(isTarget(stack)) {
 					if(foundTarget)
 						return false;
@@ -40,12 +36,12 @@ public class AttachementRecipe extends ModRecipe {
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting var1) {
-		ItemStack tool = ItemStack.EMPTY;
-		ItemStack target = ItemStack.EMPTY;
+		ItemStack tool = null;
+		ItemStack target = null;
 
 		for(int i = 0; i < var1.getSizeInventory(); i++) {
 			ItemStack stack = var1.getStackInSlot(i);
-			if(!stack.isEmpty()) {
+			if(stack != null) {
 				if(stack.getItem() == ModItems.tome)
 					tool = stack;
 				else target = stack;
@@ -81,7 +77,7 @@ public class AttachementRecipe extends ModRecipe {
 	}
 
 	public boolean isTarget(ItemStack stack) {
-		if(stack.isEmpty() || MorphingHandler.isAkashicTome(stack))
+		if(stack == null || MorphingHandler.isAkashicTome(stack))
 			return false;
 
 		String mod = MorphingHandler.getModFromStack(stack);
@@ -108,18 +104,18 @@ public class AttachementRecipe extends ModRecipe {
 	}
 
 	@Override
+	public int getRecipeSize() {
+		return 10;
+	}
+
+	@Override
 	public ItemStack getRecipeOutput() {
-		return ItemStack.EMPTY;
+		return null;
 	}
 
 	@Override
-	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
-		return NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
-	}
-
-	@Override
-	public boolean canFit(int p_194133_1_, int p_194133_2_) {
-		return false;
+	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+		return new ItemStack[inv.getSizeInventory()];
 	}
 
 }

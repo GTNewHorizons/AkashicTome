@@ -9,8 +9,8 @@ import java.util.Map;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.client.event.ConfigChangedEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ConfigHandler {
 
@@ -86,7 +86,7 @@ public class ConfigHandler {
 
 		@SubscribeEvent
 		public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
-			if(eventArgs.getModID().equals(AkashicTome.MOD_ID))
+			if(eventArgs.modID.equals(AkashicTome.MOD_ID))
 				load();
 		}
 

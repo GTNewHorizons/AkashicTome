@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.util.EnumChatFormatting;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -17,11 +18,11 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
 import vazkii.akashictome.MorphingHandler;
+import vazkii.akashictome.network.NetworkHandler;
 import vazkii.akashictome.network.message.MessageMorphTome;
-import vazkii.arl.network.NetworkHandler;
-import vazkii.arl.util.ItemNBTHelper;
+import vazkii.akashictome.utils.ItemNBTHelper;
+
 
 public class GuiTome extends GuiScreen {
 
@@ -42,19 +43,19 @@ public class GuiTome extends GuiScreen {
 
 		if(tome.hasTagCompound()) {
 			NBTTagCompound data = tome.getTagCompound().getCompoundTag(MorphingHandler.TAG_TOME_DATA);
-			List<String> keys = new ArrayList(data.getKeySet());
+			List<String> keys = new ArrayList(data.func_150296_c());
 			Collections.sort(keys);
 			
 			for(String s : keys) {
 				NBTTagCompound cmp = data.getCompoundTag(s);
 				if(cmp != null) {
-					ItemStack modStack = new ItemStack(cmp);
+					ItemStack modStack = ItemStack.loadItemStackFromNBT(cmp);
 					stacks.add(modStack);
 				}
 			}
 		}
 
-		ScaledResolution res = new ScaledResolution(mc);
+		ScaledResolution res = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int centerX = res.getScaledWidth() / 2;
 		int centerY = res.getScaledHeight() / 2;
 		
@@ -70,7 +71,7 @@ public class GuiTome extends GuiScreen {
 		drawRect(startX - padding, startY - padding, startX + iconSize * amountPerRow + padding, startY + iconSize * rows + padding, 0x22000000);
 		drawRect(startX - padding - extra, startY - padding - extra, startX + iconSize * amountPerRow + padding + extra, startY + iconSize * rows + padding + extra, 0x22000000);
 
-		ItemStack tooltipStack = ItemStack.EMPTY;
+		ItemStack tooltipStack = null;
 		
 		if(!stacks.isEmpty()) {
 			RenderHelper.enableGUIStandardItemLighting();
@@ -84,7 +85,7 @@ public class GuiTome extends GuiScreen {
 					y -= 2;
 				}
 				
-				itemRender.renderItemAndEffectIntoGUI(stack, x, y);
+				itemRender.renderItemAndEffectIntoGUI(fontRendererObj, this.mc.getTextureManager(), stack, x, y);
 			}
 			RenderHelper.disableStandardItemLighting();
 		}
@@ -118,12 +119,12 @@ public class GuiTome extends GuiScreen {
 		RenderHelper.disableStandardItemLighting();
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		
-		if(!tooltipStack.isEmpty()) {
+		if(tooltipStack != null) {
 			String name = ItemNBTHelper.getString(tooltipStack, MorphingHandler.TAG_TOME_DISPLAY_NAME, tooltipStack.getDisplayName());
 			String definedMod = MorphingHandler.getModFromStack(tooltipStack);
-			String mod = TextFormatting.GRAY + MorphingHandler.getModNameForId(definedMod);
+			String mod = EnumChatFormatting.GRAY + MorphingHandler.getModNameForId(definedMod);
 			definedMod = ItemNBTHelper.getString(tooltipStack, MorphingHandler.TAG_ITEM_DEFINED_MOD, definedMod);
-			vazkii.arl.util.RenderHelper.renderTooltip(mouseX, mouseY, Arrays.asList(new String[] { name, mod }));
+			vazkii.akashictome.utils.RenderHelper.renderTooltip(mouseX, mouseY, Arrays.asList(new String[] { name, mod }));
 			
 			if(Mouse.isButtonDown(0)) {
 				NetworkHandler.INSTANCE.sendToServer(new MessageMorphTome(definedMod));
