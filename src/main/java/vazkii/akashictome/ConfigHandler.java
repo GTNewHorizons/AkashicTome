@@ -52,8 +52,7 @@ public class ConfigHandler {
                 "witchery:ingredient:106",
                 "witchery:ingredient:107",
                 "witchery:ingredient:127",
-                "witchery:vampirebook",
-                "witchery:bookbiomes2");
+                "witchery:vampirebook");
 
         whitelistedNames = loadPropStringList(
                 "Whitelisted Names",
