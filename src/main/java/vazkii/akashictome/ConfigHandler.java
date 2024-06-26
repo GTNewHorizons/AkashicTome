@@ -18,7 +18,7 @@ public class ConfigHandler {
     public static Configuration config;
 
     public static boolean allItems;
-    public static List<String> whitelistedItems, whitelistedNames, blacklistedMods;
+    public static List<String> whitelistedItems, blacklistedItems, whitelistedNames, blacklistedMods;
 
     public static Map<String, String> aliases = new HashMap();
 
@@ -53,6 +53,11 @@ public class ConfigHandler {
                 "witchery:ingredient:107",
                 "witchery:ingredient:127",
                 "witchery:vampirebook");
+
+        blacklistedItems = loadPropStringList(
+                "Blacklisted Items",
+                "witchery:bookbiomes2"
+        );
 
         whitelistedNames = loadPropStringList(
                 "Whitelisted Names",
