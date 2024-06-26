@@ -43,7 +43,17 @@ public class ConfigHandler {
                 "theoneprobe:probenote",
                 "evilcraft:origins_of_darkness",
                 "draconicevolution:info_tablet",
-                "charset:tablet");
+                "charset:tablet",
+                "witchery:ingredient:46",
+                "witchery:ingredient:47",
+                "witchery:ingredient:48",
+                "witchery:ingredient:49",
+                "witchery:ingredient:81",
+                "witchery:ingredient:106",
+                "witchery:ingredient:107",
+                "witchery:ingredient:127",
+                "witchery:vampirebook",
+                "witchery:bookbiomes2");
 
         whitelistedNames = loadPropStringList(
                 "Whitelisted Names",
