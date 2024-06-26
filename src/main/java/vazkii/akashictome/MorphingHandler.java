@@ -1,8 +1,6 @@
 package vazkii.akashictome;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
@@ -109,6 +107,32 @@ public final class MorphingHandler {
 
         NBTTagCompound morphData = stack.getTagCompound().getCompoundTag(TAG_TOME_DATA);
         return makeMorphedStack(stack, mod, morphData);
+    }
+
+    public static boolean containsItem(ItemStack tome, ItemStack stack) {
+        System.out.println(tome);
+        System.out.println(stack);
+
+        var t = tome.getItem();
+        ArrayList<ItemStack> stacks = new ArrayList<>();
+        if (tome.hasTagCompound()) {
+            NBTTagCompound data = tome.getTagCompound().getCompoundTag(MorphingHandler.TAG_TOME_DATA);
+            List<String> keys = new ArrayList(data.func_150296_c());
+            Collections.sort(keys);
+
+            for (String s : keys) {
+                NBTTagCompound cmp = data.getCompoundTag(s);
+                if (cmp != null) {
+                    ItemStack modStack = ItemStack.loadItemStackFromNBT(cmp);
+                    stacks.add(modStack);
+                }
+            }
+        }
+
+        System.out.println(stacks);
+        return stacks.stream().anyMatch(itemStack -> itemStack.isItemEqual(stack));
+
+
     }
 
     public static ItemStack makeMorphedStack(ItemStack currentStack, String targetMod, NBTTagCompound morphData) {

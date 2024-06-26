@@ -14,9 +14,16 @@ public class AttachementRecipe implements IRecipe {
     public boolean matches(InventoryCrafting var1, World var2) {
         boolean foundTool = false;
         boolean foundTarget = false;
-
+        ItemStack tome = null;
+        ItemStack tool = null;
         for (int i = 0; i < var1.getSizeInventory(); i++) {
             ItemStack stack = var1.getStackInSlot(i);
+            if (stack != null && MorphingHandler.isAkashicTome(stack)) {
+                tome = stack;
+            }else {
+                tool = stack;
+            }
+
             if (stack != null) {
                 if (isTarget(stack)) {
                     if (foundTarget) return false;
@@ -25,6 +32,11 @@ public class AttachementRecipe implements IRecipe {
                     if (foundTool) return false;
                     foundTool = true;
                 } else return false;
+            }
+        }
+        if (tome != null && tool != null) {
+            if (MorphingHandler.containsItem(tome,tool)){
+                foundTarget = false;
             }
         }
 
