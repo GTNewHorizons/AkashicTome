@@ -18,8 +18,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import vazkii.akashictome.ModItems;
 import vazkii.akashictome.MorphingHandler;
 import vazkii.akashictome.utils.ItemNBTHelper;
-import vazkii.akashictome.wiki.IWikiProvider;
-import vazkii.akashictome.wiki.WikiHooks;
 
 public class HUDHandler {
 
@@ -53,14 +51,6 @@ public class HUDHandler {
                     drawStack = morphStack;
                     line1 = ItemNBTHelper.getString(morphStack, MorphingHandler.TAG_TOME_DISPLAY_NAME, "N/A");
                     line2 = EnumChatFormatting.GRAY + I18n.format("akashictome.clickMorph");
-                } else {
-                    IWikiProvider provider = WikiHooks.getWikiFor(block);
-                    String url = provider.getWikiURL(mc.theWorld, pos);
-                    if (url != null && !url.isEmpty()) {
-                        drawStack = new ItemStack(ModItems.tome);
-                        line1 = provider.getBlockName(mc.theWorld, pos);
-                        line2 = "@ " + EnumChatFormatting.AQUA + provider.getWikiName(mc.theWorld, pos);
-                    }
                 }
 
                 if (drawStack != null) {
