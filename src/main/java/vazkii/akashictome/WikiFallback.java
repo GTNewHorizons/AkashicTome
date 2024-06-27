@@ -1,8 +1,8 @@
 package vazkii.akashictome;
 
-import vazkii.botania.api.wiki.IWikiProvider;
-import vazkii.botania.api.wiki.SimpleWikiProvider;
-import vazkii.botania.api.wiki.WikiHooks;
+import vazkii.akashictome.wiki.IWikiProvider;
+import vazkii.akashictome.wiki.SimpleWikiProvider;
+import vazkii.akashictome.wiki.WikiHooks;
 
 public class WikiFallback {
 

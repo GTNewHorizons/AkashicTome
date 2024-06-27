@@ -13,8 +13,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 import vazkii.akashictome.client.GuiTome;
 import vazkii.akashictome.client.HUDHandler;
-import vazkii.botania.api.wiki.IWikiProvider;
-import vazkii.botania.api.wiki.WikiHooks;
+import vazkii.akashictome.wiki.IWikiProvider;
+import vazkii.akashictome.wiki.WikiHooks;
 
 public class ClientProxy extends CommonProxy {
 

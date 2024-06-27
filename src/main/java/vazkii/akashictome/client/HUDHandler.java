@@ -18,8 +18,8 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import vazkii.akashictome.ModItems;
 import vazkii.akashictome.MorphingHandler;
 import vazkii.akashictome.utils.ItemNBTHelper;
-import vazkii.botania.api.wiki.IWikiProvider;
-import vazkii.botania.api.wiki.WikiHooks;
+import vazkii.akashictome.wiki.IWikiProvider;
+import vazkii.akashictome.wiki.WikiHooks;
 
 public class HUDHandler {
 
