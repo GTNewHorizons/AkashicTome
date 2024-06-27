@@ -1,4 +1,3 @@
 dependencies {
     api("com.github.GTNewHorizons:NotEnoughItems:2.6.8-GTNH:dev")
-    api('com.github.GTNewHorizons:Botania:1.11.3-GTNH:dev')
 }
