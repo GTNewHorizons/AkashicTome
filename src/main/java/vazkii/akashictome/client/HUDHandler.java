@@ -32,7 +32,7 @@ public class HUDHandler {
         ScaledResolution res = event.resolution;
 
         if (pos != null && pos.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-            ItemStack tomeStack = mc.thePlayer.getHeldItem();
+            ItemStack tomeStack = mc.thePlayer.getCurrentEquippedItem();
 
             boolean hasTome = tomeStack != null && tomeStack.getItem() == ModItems.tome;
 
@@ -40,7 +40,6 @@ public class HUDHandler {
 
             tomeStack = tomeStack.copy();
 
-            // IBlockState state = mc.world.getBlockState(pos.getBlockPos());
             Block block = mc.theWorld.getBlock(pos.blockX, pos.blockY, pos.blockZ);
 
             if (!block.isAir(mc.theWorld, pos.blockX, pos.blockY, pos.blockZ) && !(block instanceof BlockLiquid)) {
@@ -70,7 +69,6 @@ public class HUDHandler {
                     int sx = res.getScaledWidth() / 2 - 17;
                     int sy = res.getScaledHeight() / 2 + 2;
                     RenderItem.getInstance().renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, drawStack, sx, sy);
-                    // mc.getRenderItem().renderItemIntoGUI(drawStack, sx, sy);
                     GL11.glDisable(GL11.GL_LIGHTING);
                     mc.fontRenderer.drawStringWithShadow(line1, sx + 20, sy + 4, 0xFFFFFFFF);
                     mc.fontRenderer.drawStringWithShadow(line2, sx + 25, sy + 14, 0xFFFFFFFF);
