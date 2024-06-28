@@ -9,8 +9,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.RecipeSorter;
 
@@ -38,16 +36,6 @@ public class ItemTome extends ItemMod {
             if (!ItemStack.areItemStacksEqual(newStack, stack)) {
                 playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, newStack);
                 return true;
-            }
-
-            if (worldIn.isRemote) {
-                MovingObjectPosition result = new MovingObjectPosition(
-                        aX,
-                        aY,
-                        aZ,
-                        facing,
-                        Vec3.createVectorHelper(hitX, hitY, hitZ));
-                return AkashicTome.proxy.openWikiPage(worldIn, worldIn.getBlock(aX, aY, aZ), result);
             }
         }
 
