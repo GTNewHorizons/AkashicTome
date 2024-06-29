@@ -8,17 +8,13 @@ import vazkii.akashictome.proxy.CommonProxy;
 
 @Mod(
         modid = AkashicTome.MOD_ID,
-        name = AkashicTome.MOD_NAME,
-        version = AkashicTome.VERSION,
-        dependencies = AkashicTome.DEPENDENCIES,
-        guiFactory = AkashicTome.GUI_FACTORY)
+        name = "Akashic Tome",
+        version = AkashicVersion.VERSION,
+        dependencies = "after:NotEnoughItems",
+        guiFactory = "vazkii.akashictome.client.GuiFactory")
 public class AkashicTome {
 
     public static final String MOD_ID = "akashictome";
-    public static final String MOD_NAME = "Akashic Tome";
-    public static final String VERSION = "1.0.0";
-    public static final String DEPENDENCIES = "required-after:NotEnoughItems";
-    public static final String GUI_FACTORY = "vazkii.akashictome.client.GuiFactory";
 
     @SidedProxy(
             clientSide = "vazkii.akashictome.proxy.ClientProxy",
