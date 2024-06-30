@@ -35,7 +35,11 @@ public class AttachementRecipe implements IRecipe {
             }
         }
         if (tome != null && tool != null) {
-            if (MorphingHandler.containsItem(tome, tool)) {
+            String registryName = tool.getItem().delegate.name();
+            System.out.println(registryName);
+            if (MorphingHandler.containsItem(tome, tool)
+                    && !(ConfigHandler.whitelistedDuplicatesItems.contains(registryName + ":" + tool.getItemDamage())
+                            || ConfigHandler.whitelistedDuplicatesItems.contains(registryName + ":" + "*"))) {
                 foundTarget = false;
             }
         }

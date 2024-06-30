@@ -18,7 +18,8 @@ public class ConfigHandler {
     public static Configuration config;
 
     public static boolean allItems;
-    public static List<String> whitelistedItems, blacklistedItems, whitelistedNames, blacklistedMods;
+    public static List<String> whitelistedItems, blacklistedItems, whitelistedNames, whitelistedDuplicatesItems,
+            blacklistedMods;
 
     public static Map<String, String> aliases = new HashMap();
 
@@ -43,7 +44,6 @@ public class ConfigHandler {
                 "theoneprobe:probenote",
                 "evilcraft:origins_of_darkness",
                 "draconicevolution:info_tablet",
-                "charset:tablet",
                 "witchery:ingredient:46",
                 "witchery:ingredient:47",
                 "witchery:ingredient:48",
@@ -53,9 +53,11 @@ public class ConfigHandler {
                 "witchery:ingredient:107",
                 "witchery:ingredient:127",
                 "witchery:vampirebook",
-                "Thaumcraft:ItemEldritchObject:1");
+                "Thaumcraft:ItemEldritchObject:1",
+                "BiblioCraft:item.StockroomCatalog",
+                "BiblioCraft:item.AtlasBook");
 
-        blacklistedItems = loadPropStringList("Blacklisted Items", "witchery:bookbiomes2");
+        blacklistedItems = loadPropStringList("Blacklisted Items", "witchery:bookbiomes2", "BiblioCraft:item.BigBook");
 
         whitelistedNames = loadPropStringList(
                 "Whitelisted Names",
@@ -71,7 +73,11 @@ public class ConfigHandler {
                 "codex",
                 "journal");
 
-        blacklistedMods = loadPropStringList("Blacklisted Mods");
+        whitelistedDuplicatesItems = loadPropStringList(
+                "Whitelisted Duplicates Items",
+                "gregtech:gt.multiitem.books:*");
+
+        blacklistedMods = loadPropStringList("Blacklisted Mods", "Bibliocraft");
 
         aliases.clear();
         List<String> aliasesList = loadPropStringList(
