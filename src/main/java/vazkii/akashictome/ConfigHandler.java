@@ -77,7 +77,7 @@ public class ConfigHandler {
                 "Whitelisted Duplicates Items",
                 "gregtech:gt.multiitem.books:*");
 
-        blacklistedMods = loadPropStringList("Blacklisted Mods", "Bibliocraft");
+        blacklistedMods = loadPropStringList("Blacklisted Mods");
 
         aliases.clear();
         List<String> aliasesList = loadPropStringList(
