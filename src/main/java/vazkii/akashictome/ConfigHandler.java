@@ -55,7 +55,8 @@ public class ConfigHandler {
                 "witchery:vampirebook",
                 "Thaumcraft:ItemEldritchObject:1",
                 "BiblioCraft:item.StockroomCatalog",
-                "BiblioCraft:item.AtlasBook");
+                "BiblioCraft:item.AtlasBook",
+                "structurelib:item.structurelib.constructableTrigger");
 
         blacklistedItems = loadPropStringList("Blacklisted Items", "witchery:bookbiomes2", "BiblioCraft:item.BigBook");
 
