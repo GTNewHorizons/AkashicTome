@@ -93,7 +93,8 @@ public class ConfigHandler {
                 "animus=bloodmagic",
                 "integrateddynamics=integratedtunnels",
                 "mekanismgenerators=mekanism",
-                "mekanismtools=mekanism");
+                "mekanismtools=mekanism",
+                "questbook=betterquesting");
 
         for (String s : aliasesList) if (s.matches(".+?=.+")) {
             String[] tokens = s.toLowerCase().split("=");
