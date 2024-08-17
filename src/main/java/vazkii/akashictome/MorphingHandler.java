@@ -8,11 +8,11 @@ import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
@@ -165,7 +165,7 @@ public final class MorphingHandler {
             else stackCmp.setString(TAG_TOME_DISPLAY_NAME, displayName);
 
             stack.setStackDisplayName(
-                    EnumChatFormatting.RESET + I18n.format(
+                    EnumChatFormatting.RESET + StatCollector.translateToLocalFormatted(
                             "akashictome.sudo_name",
                             EnumChatFormatting.GREEN + displayName + EnumChatFormatting.RESET));
         }
