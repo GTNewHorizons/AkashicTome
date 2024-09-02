@@ -18,7 +18,7 @@ import vazkii.akashictome.utils.TooltipHandler;
 
 public abstract class ItemMod extends Item implements IVariantHolder {
 
-    public static final List<IVariantHolder> variantHolders = new ArrayList();
+    public static final List<IVariantHolder> variantHolders = new ArrayList<>();
     private final String[] variants;
     private final String bareName;
 
@@ -55,7 +55,6 @@ public abstract class ItemMod extends Item implements IVariantHolder {
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister iReg) {
         itemIcon = IconHelper.forItem(iReg, this);
-        // itemIcon = iReg.registerIcon(AkashicTome.MOD_ID + ":" + getUnlocalizedName());
     }
 
     @Override

@@ -9,7 +9,7 @@ import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.registry.GameRegistry;
 import vazkii.akashictome.ModItems;
 import vazkii.akashictome.MorphingHandler;
-import vazkii.akashictome.network.MessageRegister;
+import vazkii.akashictome.network.NetworkHandler;
 
 public class CommonProxy {
 
@@ -22,17 +22,7 @@ public class CommonProxy {
                 new ItemStack(Blocks.bookshelf));
 
         MinecraftForge.EVENT_BUS.register(MorphingHandler.INSTANCE);
-        initHUD();
-
-        MessageRegister.init();
-    }
-
-    public void updateEquippedItem() {
-        // NO-OP
-    }
-
-    public void initHUD() {
-        // NO-OP
+        NetworkHandler.init();
     }
 
     public void openTomeGUI(EntityPlayer player, ItemStack stack) {

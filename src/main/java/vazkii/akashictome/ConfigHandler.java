@@ -21,7 +21,7 @@ public class ConfigHandler {
     public static List<String> whitelistedItems, blacklistedItems, whitelistedNames, whitelistedDuplicatesItems,
             blacklistedMods;
 
-    public static Map<String, String> aliases = new HashMap();
+    public static Map<String, String> aliases = new HashMap<>();
 
     public static void init(File configFile) {
         config = new Configuration(configFile);

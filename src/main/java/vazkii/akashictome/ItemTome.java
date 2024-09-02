@@ -59,7 +59,7 @@ public class ItemTome extends ItemMod {
         NBTTagCompound data = stack.getTagCompound().getCompoundTag(MorphingHandler.TAG_TOME_DATA);
         if (data.func_150296_c().isEmpty()) return;
         tooltipIfShift(tooltip, () -> {
-            List<String> keys = new ArrayList(data.func_150296_c());
+            List<String> keys = new ArrayList<>(data.func_150296_c());
             Collections.sort(keys);
             String currMod = "";
 
