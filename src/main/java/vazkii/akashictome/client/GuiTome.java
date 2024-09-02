@@ -39,11 +39,11 @@ public class GuiTome extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        List<ItemStack> stacks = new ArrayList();
+        List<ItemStack> stacks = new ArrayList<>();
 
         if (tome.hasTagCompound()) {
             NBTTagCompound data = tome.getTagCompound().getCompoundTag(MorphingHandler.TAG_TOME_DATA);
-            List<String> keys = new ArrayList(data.func_150296_c());
+            List<String> keys = new ArrayList<>(data.func_150296_c());
             Collections.sort(keys);
 
             for (String s : keys) {
