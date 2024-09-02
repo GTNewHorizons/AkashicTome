@@ -7,8 +7,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -19,8 +22,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import vazkii.akashictome.network.NetworkHandler;
-import vazkii.akashictome.network.message.MessageUnmorphTome;
 import vazkii.akashictome.utils.ItemNBTHelper;
 
 public final class MorphingHandler {
@@ -36,10 +37,13 @@ public final class MorphingHandler {
 
     @SubscribeEvent
     public void onPlayerLeftClick(PlayerInteractEvent event) {
-        if (event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK && event.entityPlayer.isSneaking()) {
-            ItemStack stack = event.entityPlayer.getHeldItem();
-            if (stack != null && isAkashicTome(stack) && stack.getItem() != ModItems.tome) {
-                NetworkHandler.INSTANCE.sendToServer(new MessageUnmorphTome());
+        EntityPlayer player = event.entityPlayer;
+        if (event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK && player.isSneaking()) {
+            ItemStack stack = player.getHeldItem();
+            if (MorphingHandler.isAkashicTome(stack) && stack.getItem() != ModItems.tome) {
+                ItemStack newStack = MorphingHandler.getShiftStackForMod(stack, MorphingHandler.MINECRAFT);
+                player.inventory.setInventorySlotContents(player.inventory.currentItem, newStack);
+                player.inventoryContainer.detectAndSendChanges();
             }
         }
     }

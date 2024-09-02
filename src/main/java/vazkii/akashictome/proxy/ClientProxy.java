@@ -11,12 +11,8 @@ import vazkii.akashictome.client.HUDHandler;
 public class ClientProxy extends CommonProxy {
 
     @Override
-    public void updateEquippedItem() {
-        Minecraft.getMinecraft().entityRenderer.itemRenderer.resetEquippedProgress();
-    }
-
-    @Override
-    public void initHUD() {
+    public void preInit() {
+        super.preInit();
         MinecraftForge.EVENT_BUS.register(new HUDHandler());
     }
 
