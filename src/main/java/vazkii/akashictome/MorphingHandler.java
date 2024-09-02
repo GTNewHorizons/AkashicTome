@@ -54,7 +54,7 @@ public final class MorphingHandler {
 
         EntityItem e = event.entityItem;
         ItemStack stack = e.getEntityItem();
-        if (stack != null && isAkashicTome(stack) && stack.getItem() != ModItems.tome) {
+        if (isAkashicTome(stack) && stack.getItem() != ModItems.tome) {
             NBTTagCompound morphData = (NBTTagCompound) stack.getTagCompound().getCompoundTag(TAG_TOME_DATA).copy();
             String currentMod = ItemNBTHelper.getString(stack, TAG_ITEM_DEFINED_MOD, getModFromStack(stack));
 
@@ -92,13 +92,14 @@ public final class MorphingHandler {
         return getModOrAlias(mod[0]);
     }
 
-    public static String getModFromStack(ItemStack stack) {
+    public static String getModFromStack(@Nullable ItemStack stack) {
+        if (stack == null) return MINECRAFT;
         String[] mod = stack.getItem().delegate.name().split(":");
-        return getModOrAlias(stack == null ? MINECRAFT : mod[0]);
+        return getModOrAlias(mod[0]);
     }
 
     public static String getModOrAlias(String mod) {
-        return ConfigHandler.aliases.containsKey(mod) ? ConfigHandler.aliases.get(mod) : mod;
+        return ConfigHandler.aliases.getOrDefault(mod, mod);
     }
 
     public static boolean doesStackHaveModAttached(ItemStack stack, String mod) {
@@ -122,7 +123,7 @@ public final class MorphingHandler {
         ArrayList<ItemStack> stacks = new ArrayList<>();
         if (tome.hasTagCompound()) {
             NBTTagCompound data = tome.getTagCompound().getCompoundTag(MorphingHandler.TAG_TOME_DATA);
-            List<String> keys = new ArrayList(data.func_150296_c());
+            List<String> keys = new ArrayList<>(data.func_150296_c());
             Collections.sort(keys);
 
             for (String s : keys) {
@@ -187,7 +188,7 @@ public final class MorphingHandler {
 
     public static String getModNameForId(String modId) {
         modId = modId.toLowerCase(Locale.ENGLISH);
-        return modNames.containsKey(modId) ? modNames.get(modId) : modId;
+        return modNames.getOrDefault(modId, modId);
     }
 
     public static boolean isAkashicTome(ItemStack stack) {

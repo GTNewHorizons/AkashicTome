@@ -47,7 +47,7 @@ public class HUDHandler {
 
                 String mod = MorphingHandler.getModFromBlock(block);
                 ItemStack morphStack = MorphingHandler.getShiftStackForMod(tomeStack, mod);
-                if (morphStack != null && !ItemStack.areItemStacksEqual(morphStack, tomeStack)) {
+                if (!ItemStack.areItemStacksEqual(morphStack, tomeStack)) {
                     drawStack = morphStack;
                     line1 = ItemNBTHelper.getString(morphStack, MorphingHandler.TAG_TOME_DISPLAY_NAME, "N/A");
                     line2 = EnumChatFormatting.GRAY + I18n.format("akashictome.clickMorph");

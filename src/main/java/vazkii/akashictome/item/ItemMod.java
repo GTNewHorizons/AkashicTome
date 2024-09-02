@@ -55,7 +55,6 @@ public abstract class ItemMod extends Item implements IVariantHolder {
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister iReg) {
         itemIcon = IconHelper.forItem(iReg, this);
-        // itemIcon = iReg.registerIcon(AkashicTome.MOD_ID + ":" + getUnlocalizedName());
     }
 
     @Override
