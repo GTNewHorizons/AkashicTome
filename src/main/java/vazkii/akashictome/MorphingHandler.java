@@ -129,7 +129,7 @@ public final class MorphingHandler {
             for (String s : keys) {
                 NBTTagCompound cmp = data.getCompoundTag(s);
                 if (cmp != null) {
-                    ItemStack modStack = ItemStack.loadItemStackFromNBT(cmp);
+                    ItemStack modStack = ItemNBTHelper.loadItemStackFromNBT(cmp);
                     stacks.add(modStack);
                 }
             }
@@ -140,9 +140,7 @@ public final class MorphingHandler {
     public static ItemStack makeMorphedStack(ItemStack currentStack, String targetMod, NBTTagCompound morphData) {
         String currentMod = ItemNBTHelper.getString(currentStack, TAG_ITEM_DEFINED_MOD, getModFromStack(currentStack));
 
-        NBTTagCompound currentCmp = new NBTTagCompound();
-        currentStack.writeToNBT(currentCmp);
-        currentCmp = (NBTTagCompound) currentCmp.copy();
+        NBTTagCompound currentCmp = ItemNBTHelper.saveItemStackToNBT(currentStack);
         if (currentCmp.hasKey("tag")) currentCmp.getCompoundTag("tag").removeTag(TAG_TOME_DATA);
 
         if (!currentMod.equalsIgnoreCase(MINECRAFT) && !currentMod.equalsIgnoreCase(AkashicTome.MOD_ID))
@@ -154,7 +152,7 @@ public final class MorphingHandler {
             NBTTagCompound targetCmp = morphData.getCompoundTag(targetMod);
             morphData.removeTag(targetMod);
 
-            stack = ItemStack.loadItemStackFromNBT(targetCmp);
+            stack = ItemNBTHelper.loadItemStackFromNBT(targetCmp);
             if (stack == null) stack = new ItemStack(ModItems.tome);
         }
 

@@ -14,6 +14,7 @@ import net.minecraftforge.oredict.RecipeSorter;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import vazkii.akashictome.item.ItemMod;
+import vazkii.akashictome.utils.ItemNBTHelper;
 
 public class ItemTome extends ItemMod {
 
@@ -66,7 +67,7 @@ public class ItemTome extends ItemMod {
             for (String s : keys) {
                 NBTTagCompound cmp = data.getCompoundTag(s);
                 if (cmp != null) {
-                    ItemStack modStack = ItemStack.loadItemStackFromNBT(cmp);
+                    ItemStack modStack = ItemNBTHelper.loadItemStackFromNBT(cmp);
                     if (modStack != null) {
                         String name = modStack.getDisplayName();
                         if (modStack.hasTagCompound()
