@@ -79,9 +79,7 @@ public class AttachementRecipe implements IRecipe {
         }
 
         ItemNBTHelper.setString(target, MorphingHandler.TAG_ITEM_DEFINED_MOD, mod);
-        NBTTagCompound modCmp = new NBTTagCompound();
-        target.writeToNBT(modCmp);
-        morphData.setTag(mod, modCmp);
+        morphData.setTag(mod, ItemNBTHelper.saveItemStackToNBT(target));
 
         return copy;
     }

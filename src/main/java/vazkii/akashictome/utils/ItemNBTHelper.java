@@ -5,13 +5,16 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.oredict.OreDictionary;
 
 import codechicken.nei.PositionedStack;
+import cpw.mods.fml.common.registry.GameData;
 
 public final class ItemNBTHelper {
 
@@ -228,5 +231,42 @@ public final class ItemNBTHelper {
         for (ItemStack item : stack.items) if (areStacksSameTypeCraftingWithNBT(item, ingredient)) return true;
 
         return false;
+    }
+
+    /**
+     * Alternative to {@link ItemStack#loadItemStackFromNBT(NBTTagCompound)} which uses the item's registry name instead
+     * of its ID.
+     */
+    public static ItemStack loadItemStackFromNBT(NBTTagCompound nbt) {
+        String name = nbt.getString("name");
+        if (name == null) {
+            return null;
+        }
+        Item item = GameData.getItemRegistry().getObject(name);
+        if (item == null) {
+            return null;
+        }
+        int size = nbt.getByte("Count");
+        int meta = nbt.getShort("Damage");
+        ItemStack stack = new ItemStack(item, size, meta);
+        if (nbt.hasKey("tag", NBT.TAG_COMPOUND)) {
+            stack.stackTagCompound = nbt.getCompoundTag("tag");
+        }
+        return stack;
+    }
+
+    /**
+     * Alternative to {@link ItemStack#writeToNBT(NBTTagCompound)} which uses the item's registry name instead of its
+     * ID.
+     */
+    public static NBTTagCompound saveItemStackToNBT(ItemStack stack) {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setString("name", stack.getItem().delegate.name());
+        nbt.setByte("Count", (byte) stack.stackSize);
+        nbt.setShort("Damage", (short) stack.getItemDamage());
+        if (stack.stackTagCompound != null) {
+            nbt.setTag("tag", stack.stackTagCompound);
+        }
+        return nbt;
     }
 }

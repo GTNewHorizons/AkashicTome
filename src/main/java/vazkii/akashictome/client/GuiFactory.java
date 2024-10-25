@@ -39,7 +39,7 @@ public class GuiFactory implements IModGuiFactory {
         public ConfigGui(GuiScreen parentScreen) {
             super(
                     parentScreen,
-                    new ConfigElement(ConfigHandler.config.getCategory(Configuration.CATEGORY_GENERAL))
+                    new ConfigElement<>(ConfigHandler.config.getCategory(Configuration.CATEGORY_GENERAL))
                             .getChildElements(),
                     AkashicTome.MOD_ID,
                     false,

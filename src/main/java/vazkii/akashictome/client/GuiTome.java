@@ -49,7 +49,7 @@ public class GuiTome extends GuiScreen {
             for (String s : keys) {
                 NBTTagCompound cmp = data.getCompoundTag(s);
                 if (cmp != null) {
-                    ItemStack modStack = ItemStack.loadItemStackFromNBT(cmp);
+                    ItemStack modStack = ItemNBTHelper.loadItemStackFromNBT(cmp);
                     stacks.add(modStack);
                 }
             }

@@ -11,7 +11,8 @@ import vazkii.akashictome.proxy.CommonProxy;
         name = "Akashic Tome",
         version = AkashicVersion.VERSION,
         dependencies = "after:NotEnoughItems",
-        guiFactory = "vazkii.akashictome.client.GuiFactory")
+        guiFactory = "vazkii.akashictome.client.GuiFactory",
+        acceptedMinecraftVersions = "[1.7.10]")
 public class AkashicTome {
 
     public static final String MOD_ID = "akashictome";
