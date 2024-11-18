@@ -11,13 +11,11 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
@@ -36,25 +34,12 @@ public final class MorphingHandler {
     public static final String TAG_ITEM_DEFINED_MOD = "akashictome:definedMod";
 
     @SubscribeEvent
-    public void onPlayerLeftClick(PlayerInteractEvent event) {
-        EntityPlayer player = event.entityPlayer;
-        if (event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK && player.isSneaking()) {
-            ItemStack stack = player.getHeldItem();
-            if (MorphingHandler.isAkashicTome(stack) && stack.getItem() != ModItems.tome) {
-                ItemStack newStack = MorphingHandler.getShiftStackForMod(stack, MorphingHandler.MINECRAFT);
-                player.inventory.setInventorySlotContents(player.inventory.currentItem, newStack);
-                player.inventoryContainer.detectAndSendChanges();
-            }
-        }
-    }
-
-    @SubscribeEvent
     public void onItemDropped(ItemTossEvent event) {
         if (!event.player.isSneaking()) return;
 
         EntityItem e = event.entityItem;
         ItemStack stack = e.getEntityItem();
-        if (isAkashicTome(stack) && stack.getItem() != ModItems.tome) {
+        if (isMorphedTome(stack)) {
             NBTTagCompound morphData = (NBTTagCompound) stack.getTagCompound().getCompoundTag(TAG_TOME_DATA).copy();
             String currentMod = ItemNBTHelper.getString(stack, TAG_ITEM_DEFINED_MOD, getModFromStack(stack));
 
@@ -187,6 +172,10 @@ public final class MorphingHandler {
     public static String getModNameForId(String modId) {
         modId = modId.toLowerCase(Locale.ENGLISH);
         return modNames.getOrDefault(modId, modId);
+    }
+
+    public static boolean isMorphedTome(ItemStack stack) {
+        return isAkashicTome(stack) && stack.getItem() != ModItems.tome;
     }
 
     public static boolean isAkashicTome(ItemStack stack) {
