@@ -38,7 +38,7 @@ public class ConfigHandler {
         whitelistedItems = loadPropStringList(
                 "Whitelisted Items",
                 "roots:runedtablet",
-                "opencomputers:tool:4",
+                "OpenComputers:item:98",
                 "immersiveengineering:tool:3",
                 "integrateddynamics:on_the_dynamics_of_integration",
                 "theoneprobe:probenote",
