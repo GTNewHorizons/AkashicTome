@@ -10,11 +10,13 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 
 import cpw.mods.fml.common.Loader;
@@ -159,6 +161,16 @@ public final class MorphingHandler {
         }
 
         stack.stackSize = 1;
+
+        Map<Integer, Integer> enchantments = EnchantmentHelper.getEnchantments(currentStack);
+        if (!enchantments.isEmpty()) {
+            EnchantmentHelper.setEnchantments(enchantments, stack);
+            // We can assume that there is a tag compound if the enchantment map is not null
+            if (currentStack.getTagCompound().hasKey("RepairCost", Constants.NBT.TAG_INT)) {
+                stack.getTagCompound().setInteger("RepairCost", currentStack.getTagCompound().getInteger("RepairCost"));
+            }
+        }
+
         return stack;
     }
 
