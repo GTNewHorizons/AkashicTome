@@ -43,7 +43,7 @@ public class ConfigHandler {
                 "integrateddynamics:on_the_dynamics_of_integration",
                 "theoneprobe:probenote",
                 "evilcraft:origins_of_darkness",
-                "draconicevolution:info_tablet",
+                "DraconicEvolution:infoTablet",
                 "witchery:ingredient:46",
                 "witchery:ingredient:47",
                 "witchery:ingredient:48",
