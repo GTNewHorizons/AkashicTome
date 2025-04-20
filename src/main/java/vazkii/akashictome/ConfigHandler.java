@@ -58,7 +58,25 @@ public class ConfigHandler {
                 "BiblioCraft:item.AtlasBook",
                 "structurelib:item.structurelib.constructableTrigger");
 
-        blacklistedItems = loadPropStringList("Blacklisted Items", "witchery:bookbiomes2", "BiblioCraft:item.BigBook");
+        blacklistedItems = loadPropStringList(
+                "Blacklisted Items",
+                "Automagy:blockBookshelfEnchanted",
+                "Automagy:blockReqTome",
+                "BiblioCraft:item.BigBook",
+                "BiblioCraft:BookcaseFilled",
+                "BiblioWoodsBoP:BiblioWoodBookcase",
+                "BiblioWoodsForestry:BiblioWoodFstBookcase",
+                "BiblioWoodsForestry:BiblioWoodFstBookcase2",
+                "BiblioWoodsNatura:BiblioWoodBookcase",
+                "HardcoreEnderExpansion:knowledge_note",
+                "Natura:Natura.bookshelf",
+                "OpenBlocks:guide",
+                "OpenBlocks:builder_guide",
+                "chisel:bookshelf",
+                "gadomancy:BlockKnowledgeBook",
+                "thaumicenergistics:thaumicenergistics.block.knowledge.inscriber",
+                "thaumicenergistics:knowledge.core",
+                "witchery:bookbiomes2");
 
         whitelistedNames = loadPropStringList(
                 "Whitelisted Names",
