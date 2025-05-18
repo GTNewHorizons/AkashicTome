@@ -117,7 +117,9 @@ public final class MorphingHandler {
                 NBTTagCompound cmp = data.getCompoundTag(s);
                 if (cmp != null) {
                     ItemStack modStack = ItemNBTHelper.loadItemStackFromNBT(cmp);
-                    stacks.add(modStack);
+                    if (modStack != null) {
+                        stacks.add(modStack);
+                    }
                 }
             }
         }
