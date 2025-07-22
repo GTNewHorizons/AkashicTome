@@ -52,7 +52,7 @@ public class ConfigHandler {
                 "witchery:ingredient:106",
                 "witchery:ingredient:107",
                 "witchery:ingredient:127",
-                "witchery:vampirebook",
+                "witchery:vampirebook:9",
                 "Thaumcraft:ItemEldritchObject:1",
                 "BiblioCraft:item.StockroomCatalog",
                 "BiblioCraft:item.AtlasBook",
@@ -76,7 +76,16 @@ public class ConfigHandler {
                 "gadomancy:BlockKnowledgeBook",
                 "thaumicenergistics:thaumicenergistics.block.knowledge.inscriber",
                 "thaumicenergistics:knowledge.core",
-                "witchery:bookbiomes2");
+                "witchery:bookbiomes2",
+                "witchery:vampirebook:0",
+                "witchery:vampirebook:1",
+                "witchery:vampirebook:2",
+                "witchery:vampirebook:3",
+                "witchery:vampirebook:4",
+                "witchery:vampirebook:5",
+                "witchery:vampirebook:6",
+                "witchery:vampirebook:7",
+                "witchery:vampirebook:8");
 
         whitelistedNames = loadPropStringList(
                 "Whitelisted Names",
