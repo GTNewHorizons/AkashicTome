@@ -54,18 +54,23 @@ public class HUDHandler {
                 }
 
                 if (drawStack != null) {
-                    GL11.glEnable(GL11.GL_BLEND);
-                    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-                    int sx = res.getScaledWidth() / 2 - 17;
-                    int sy = res.getScaledHeight() / 2 + 2;
-                    RenderItem.getInstance().renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, drawStack, sx, sy);
-                    GL11.glDisable(GL11.GL_LIGHTING);
-                    mc.fontRenderer.drawStringWithShadow(line1, sx + 20, sy + 4, 0xFFFFFFFF);
-                    mc.fontRenderer.drawStringWithShadow(line2, sx + 25, sy + 14, 0xFFFFFFFF);
-                    GL11.glColor4f(1F, 1F, 1F, 1F);
+                    draw(drawStack, line1, line2, res);
                 }
             }
         }
+    }
+
+    static void draw(ItemStack drawStack, String line1, String line2, ScaledResolution res) {
+        Minecraft mc = Minecraft.getMinecraft();
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        int sx = res.getScaledWidth() / 2 - 17;
+        int sy = res.getScaledHeight() / 2 + 2;
+        RenderItem.getInstance().renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, drawStack, sx, sy);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        mc.fontRenderer.drawStringWithShadow(line1, sx + 20, sy + 4, 0xFFFFFFFF);
+        mc.fontRenderer.drawStringWithShadow(line2, sx + 25, sy + 14, 0xFFFFFFFF);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
     }
 
 }
