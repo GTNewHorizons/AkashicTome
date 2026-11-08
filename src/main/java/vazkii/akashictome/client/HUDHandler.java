@@ -14,12 +14,15 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import vazkii.akashictome.ModItems;
 import vazkii.akashictome.MorphingHandler;
 import vazkii.akashictome.utils.ItemNBTHelper;
 
 public class HUDHandler {
+
+    private static final boolean DASHBOARD = Loader.isModLoaded("dashboard");
 
     @SubscribeEvent
     public void onDrawScreen(RenderGameOverlayEvent.Post event) {
@@ -54,7 +57,9 @@ public class HUDHandler {
                 }
 
                 if (drawStack != null) {
+                    if (DASHBOARD && !DashboardHud.beginBookHint(res)) return;
                     draw(drawStack, line1, line2, res);
+                    if (DASHBOARD) DashboardHud.endRender();
                 }
             }
         }
