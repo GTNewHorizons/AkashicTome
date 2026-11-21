@@ -6,8 +6,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.common.MinecraftForge;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import vazkii.akashictome.MorphingHandler;
+import vazkii.akashictome.client.DashboardHud;
 import vazkii.akashictome.client.GuiTome;
 import vazkii.akashictome.client.HUDHandler;
 import vazkii.akashictome.network.NetworkHandler;
@@ -19,6 +21,9 @@ public class ClientProxy extends CommonProxy {
     public void preInit() {
         super.preInit();
         MinecraftForge.EVENT_BUS.register(new HUDHandler());
+        if (Loader.isModLoaded("dashboard")) {
+            DashboardHud.register();
+        }
         MinecraftForge.EVENT_BUS.register(this);
     }
 

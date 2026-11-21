@@ -10,7 +10,7 @@ import vazkii.akashictome.proxy.CommonProxy;
         modid = AkashicTome.MOD_ID,
         name = "Akashic Tome",
         version = AkashicVersion.VERSION,
-        dependencies = "after:NotEnoughItems",
+        dependencies = "after:NotEnoughItems;after:dashboard@[1.0.20,)",
         guiFactory = "vazkii.akashictome.client.GuiFactory",
         acceptedMinecraftVersions = "[1.7.10]")
 public class AkashicTome {

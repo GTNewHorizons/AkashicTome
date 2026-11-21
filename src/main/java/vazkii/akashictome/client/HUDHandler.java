@@ -14,12 +14,15 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import vazkii.akashictome.ModItems;
 import vazkii.akashictome.MorphingHandler;
 import vazkii.akashictome.utils.ItemNBTHelper;
 
 public class HUDHandler {
+
+    private static final boolean DASHBOARD = Loader.isModLoaded("dashboard");
 
     @SubscribeEvent
     public void onDrawScreen(RenderGameOverlayEvent.Post event) {
@@ -54,18 +57,25 @@ public class HUDHandler {
                 }
 
                 if (drawStack != null) {
-                    GL11.glEnable(GL11.GL_BLEND);
-                    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-                    int sx = res.getScaledWidth() / 2 - 17;
-                    int sy = res.getScaledHeight() / 2 + 2;
-                    RenderItem.getInstance().renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, drawStack, sx, sy);
-                    GL11.glDisable(GL11.GL_LIGHTING);
-                    mc.fontRenderer.drawStringWithShadow(line1, sx + 20, sy + 4, 0xFFFFFFFF);
-                    mc.fontRenderer.drawStringWithShadow(line2, sx + 25, sy + 14, 0xFFFFFFFF);
-                    GL11.glColor4f(1F, 1F, 1F, 1F);
+                    if (DASHBOARD && !DashboardHud.beginBookHint(res)) return;
+                    draw(drawStack, line1, line2, res);
+                    if (DASHBOARD) DashboardHud.endRender();
                 }
             }
         }
+    }
+
+    static void draw(ItemStack drawStack, String line1, String line2, ScaledResolution res) {
+        Minecraft mc = Minecraft.getMinecraft();
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        int sx = res.getScaledWidth() / 2 - 17;
+        int sy = res.getScaledHeight() / 2 + 2;
+        RenderItem.getInstance().renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, drawStack, sx, sy);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        mc.fontRenderer.drawStringWithShadow(line1, sx + 20, sy + 4, 0xFFFFFFFF);
+        mc.fontRenderer.drawStringWithShadow(line2, sx + 25, sy + 14, 0xFFFFFFFF);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
     }
 
 }
